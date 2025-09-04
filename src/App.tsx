@@ -1,4 +1,5 @@
 import './App.css'
+import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import AdminLayout from './layouts/AdminLayout'
 import Dashboard from './pages/Dashboard/Dashboard'
@@ -11,8 +12,19 @@ import MediaLibrary from './pages/Media'
 import CategoriesList from './pages/Categories/CategoriesList'
 import AddCategory from './pages/Categories/AddCategory'
 import UpdateCategory from './pages/Categories/UpdateCategory'
+import SplashScreen from './components/SplashScreen'
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+  };
+
+  if (showSplash) {
+    return <SplashScreen onComplete={handleSplashComplete} />;
+  }
+
   return (
     <Router>
       <Routes>
