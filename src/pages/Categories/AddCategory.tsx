@@ -13,12 +13,12 @@ const AddCategory = () => {
   // Optional
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
-  const [icon, setIcon] = useState('');
-  const [order, setOrder] = useState<number | ''>('');
+  const [icon] = useState('');
+  const [order] = useState<number | ''>('');
   const [isActive, setIsActive] = useState(true);
   const [isFeatured, setIsFeatured] = useState(false);
-  const [parentId, setParentId] = useState<string | ''>('');
-  const [attributesText, setAttributesText] = useState('');
+  const [parentId] = useState<string | ''>('');
+  const [attributesText] = useState('');
   const [seoMetaTitle, setSeoMetaTitle] = useState('');
   const [seoMetaDescription, setSeoMetaDescription] = useState('');
   const [seoKeywordsText, setSeoKeywordsText] = useState('');
