@@ -12,6 +12,12 @@ import MediaLibrary from './pages/Media'
 import CategoriesList from './pages/Categories/CategoriesList'
 import AddCategory from './pages/Categories/AddCategory'
 import UpdateCategory from './pages/Categories/UpdateCategory'
+import Orders from './pages/Orders'
+import Users from './pages/Users'
+import AddUser from './pages/Users/AddUser'
+import Profile from './pages/Profile'
+import Login from './pages/Auth/Login'
+import ProtectedRoute from './components/ProtectedRoute'
 import SplashScreen from './components/SplashScreen'
 
 function App() {
@@ -28,19 +34,29 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
-        <Route path="/categories" element={<AdminLayout><CategoriesList /></AdminLayout>} />
-        <Route path="/categories/add" element={<AdminLayout><AddCategory /></AdminLayout>} />
-        <Route path="/categories/update" element={<Navigate to="/categories" replace />} />
-        <Route path="/categories/update/:id" element={<AdminLayout><UpdateCategory /></AdminLayout>} />
-        <Route path="/products" element={<AdminLayout><ProductsList /></AdminLayout>} />
-        <Route path="/products/add" element={<AdminLayout><AddProduct /></AdminLayout>} />
-        <Route path="/products/inventory" element={<AdminLayout><ProductInventory /></AdminLayout>} />
-        <Route path="/products/edit/:id" element={<AdminLayout><EditProduct /></AdminLayout>} />
-        <Route path="/products/:id" element={<AdminLayout><ProductDetails /></AdminLayout>} />
-        <Route path="/media/images" element={<AdminLayout><MediaLibrary /></AdminLayout>} />
-        <Route path="/media" element={<Navigate to="/media/images" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<ProtectedRoute><AdminLayout><Dashboard /></AdminLayout></ProtectedRoute>} />
+        <Route path="/categories" element={<ProtectedRoute><AdminLayout><CategoriesList /></AdminLayout></ProtectedRoute>} />
+        <Route path="/categories/add" element={<ProtectedRoute><AdminLayout><AddCategory /></AdminLayout></ProtectedRoute>} />
+        <Route path="/categories/update" element={<ProtectedRoute><Navigate to="/categories" replace /></ProtectedRoute>} />
+        <Route path="/categories/update/:id" element={<ProtectedRoute><AdminLayout><UpdateCategory /></AdminLayout></ProtectedRoute>} />
+        <Route path="/products" element={<ProtectedRoute><AdminLayout><ProductsList /></AdminLayout></ProtectedRoute>} />
+        <Route path="/products/add" element={<ProtectedRoute><AdminLayout><AddProduct /></AdminLayout></ProtectedRoute>} />
+        <Route path="/products/inventory" element={<ProtectedRoute><AdminLayout><ProductInventory /></AdminLayout></ProtectedRoute>} />
+        <Route path="/products/edit/:id" element={<ProtectedRoute><AdminLayout><EditProduct /></AdminLayout></ProtectedRoute>} />
+        <Route path="/products/:id" element={<ProtectedRoute><AdminLayout><ProductDetails /></AdminLayout></ProtectedRoute>} />
+        <Route path="/media/images" element={<ProtectedRoute><AdminLayout><MediaLibrary /></AdminLayout></ProtectedRoute>} />
+        <Route path="/media" element={<ProtectedRoute><Navigate to="/media/images" replace /></ProtectedRoute>} />
+        <Route path="/orders" element={<ProtectedRoute><AdminLayout><Orders /></AdminLayout></ProtectedRoute>} />
+        <Route path="/orders/details" element={<ProtectedRoute><AdminLayout><Orders /></AdminLayout></ProtectedRoute>} />
+        <Route path="/orders/whatsapp" element={<ProtectedRoute><AdminLayout><Orders /></AdminLayout></ProtectedRoute>} />
+        <Route path="/orders/delivery" element={<ProtectedRoute><AdminLayout><Orders /></AdminLayout></ProtectedRoute>} />
+        <Route path="/users" element={<ProtectedRoute><AdminLayout><Users /></AdminLayout></ProtectedRoute>} />
+        <Route path="/users/add" element={<ProtectedRoute><AdminLayout><AddUser /></AdminLayout></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><AdminLayout><Profile /></AdminLayout></ProtectedRoute>} />
+        <Route path="/users/roles" element={<ProtectedRoute><AdminLayout><Users /></AdminLayout></ProtectedRoute>} />
+        <Route path="/users/activity" element={<ProtectedRoute><AdminLayout><Users /></AdminLayout></ProtectedRoute>} />
         {/* Autres routes à ajouter ici */}
       </Routes>
     </Router>

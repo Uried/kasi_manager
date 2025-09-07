@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Link as RouterLink } from '../components/shared/RouterLink';
 import kasiLogo from '../assets/images/kasi-logo.png';
 
@@ -19,8 +19,17 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [activeItem, setActiveItem] = useState<string>('/dashboard'); // Default active item
+  const [user, setUser] = useState<any>(null);
   const [pageTitle, setPageTitle] = useState<string>('Dashboard');
   const location = useLocation();
+
+  // Charger les données utilisateur depuis localStorage
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
 
   const sidebarItems: SidebarItem[] = [
     {
@@ -49,28 +58,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         { title: 'Création de catégorie', path: '/categories/add' },
       ],
     },
-    // {
-    //   title: 'Gestion des commandes',
-    //   path: '/orders',
-    //   icon: 'shopping-cart',
-    //   subItems: [
-    //     { title: 'Liste des commandes', path: '/orders' },
-    //     { title: 'Détail des commandes', path: '/orders/details' },
-    //     { title: 'Suivi WhatsApp', path: '/orders/whatsapp' },
-    //     { title: 'Bons de livraison', path: '/orders/delivery' },
-    //   ],
-    // },
-    // {
-    //   title: 'Gestion des clients',
-    //   path: '/customers',
-    //   icon: 'users',
-    //   subItems: [
-    //     { title: 'Liste des clients', path: '/customers' },
-    //     { title: 'Fiches clients', path: '/customers/details' },
-    //     { title: 'Historique des commandes', path: '/customers/orders' },
-    //     { title: 'Segmentation client', path: '/customers/segments' },
-    //   ],
-    // },
     {
       title: 'Médiathèque',
       path: '/media',
@@ -79,6 +66,14 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         { title: 'Bibliothèque d\'images', path: '/media/images' },
         // { title: 'Bibliothèque vidéo', path: '/media/videos' },
         // { title: 'Documents', path: '/media/documents' },
+      ],
+    },
+    {
+      title: 'Gerer les commandes',
+      path: '/orders',
+      icon: 'shopping-cart',
+      subItems: [
+        { title: 'Liste des commandes', path: '/orders' },
       ],
     },
     // {
@@ -124,23 +119,24 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     //   icon: 'chart-line',
     //   subItems: [
     //     { title: 'Rapports de ventes', path: '/reports/sales' },
-    //     { title: 'Statistiques produits', path: '/reports/products' },
-    //     { title: 'Comportement utilisateur', path: '/reports/users' },
-    //     { title: 'Performances marketing', path: '/reports/marketing' },
-    //     { title: 'Exportation de données', path: '/reports/export' },
+    //     // { title: 'Statistiques produits', path: '/reports/products' },
+    //     // { title: 'Comportement utilisateur', path: '/reports/users' },
+    //     // { title: 'Performances marketing', path: '/reports/marketing' },
+    //     // { title: 'Exportation de données', path: '/reports/export' },
     //   ],
     // },
-    // {
-    //   title: 'Gestion des utilisateurs',
-    //   path: '/users',
-    //   icon: 'user-shield',
-    //   subItems: [
-    //     { title: 'Comptes administrateurs', path: '/users/admins' },
-    //     { title: 'Rôles et permissions', path: '/users/roles' },
-    //     { title: 'Journal d\'activité', path: '/users/activity' },
-    //     { title: 'Sécurité et accès', path: '/users/security' },
-    //   ],
-    // },
+    {
+      title: 'Gestion des utilisateurs',
+      path: '/users',
+      icon: 'user-shield',
+      subItems: [
+        { title: 'Liste des utilisateurs', path: '/users' },
+        { title: 'Ajouter un administrateur', path: '/users/add' },
+        { title: 'Mon profil', path: '/profile' },
+        // { title: 'Rôles et permissions', path: '/users/roles' },
+        // { title: 'Journal d\'activité', path: '/users/activity' },
+      ],
+    },
   ];
 
   const toggleSidebar = () => {
@@ -330,7 +326,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           )}
           <button
             onClick={toggleSidebar}
-            className="p-1 rounded-full hover:bg-white hover:bg-opacity-10 focus:outline-none"
+            className="p-1 rounded-full hover:bg-white hidden hover:bg-opacity-10 focus:outline-none"
           >
             <svg
               className="w-4 h-4"
@@ -445,7 +441,15 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               <h2 className="text-lg font-medium text-gray-700">{pageTitle}</h2>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="p-1 rounded-full hover:bg-gray-100 focus:outline-none">
+              <button
+                onClick={() => {
+                  localStorage.removeItem('access_token');
+                  localStorage.removeItem('user');
+                  window.location.href = '/login';
+                }}
+                className="p-1 rounded-full text-black hover:bg-gray-100 focus:outline-none"
+                title="Se déconnecter"
+              >
                 <svg
                   className="w-6 h-6"
                   fill="none"
@@ -457,16 +461,20 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-6 0v-1m6-4V7a3 3 0 00-6 0v1"
                   />
                 </svg>
               </button>
               <div className="relative">
                 <div className="flex items-center space-x-2 text-black border border-gray-300 rounded-md py-2 px-4 focus:outline-none">
                   <div className="w-8 h-8 rounded-full bg-gray-200 border flex items-center justify-center text-gray-700">
-                    <span className="text-sm font-medium">A</span>
+                    <span className="text-sm font-medium">
+                      {user?.fullName ? user.fullName.charAt(0).toUpperCase() : 'A'}
+                    </span>
                   </div>
-                  <span className="hidden md:block">Admin</span>
+                  <span className="hidden md:block">
+                    {user?.fullName || 'Admin'}
+                  </span>
                 </div>
               </div>
             </div>
