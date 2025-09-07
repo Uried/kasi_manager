@@ -21,7 +21,7 @@ const Users: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.kasi.market';
 
   // Load current user and fetch users from API
   useEffect(() => {

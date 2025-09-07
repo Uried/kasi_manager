@@ -1,5 +1,5 @@
 // Service pour gérer les téléchargements de fichiers
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.kasi.market/api';
 const FILE_UPLOAD_URL = import.meta.env.VITE_FILE_UPLOAD_URL || `${API_BASE_URL}/file-management/upload`;
 
 export interface FileUploadResponse {
@@ -160,7 +160,7 @@ export const formatImageUrl = (url: string): string => {
   if (url.startsWith('/')) {
     // Extraire le domaine de l'API_BASE_URL
     const apiUrlParts = API_BASE_URL.split('/api');
-    const baseUrl = apiUrlParts[0]; // http://localhost:8000
+    const baseUrl = apiUrlParts[0]; // https://api.kasi.market
     return `${baseUrl}${url}`;
   }
   

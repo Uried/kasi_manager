@@ -43,7 +43,7 @@ interface OrdersResponse {
   limit: number;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.kasi.market';
 
 export const orderService = {
   async getOrders(page = 1, limit = 10): Promise<OrdersResponse> {
