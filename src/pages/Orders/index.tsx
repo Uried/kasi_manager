@@ -6,7 +6,7 @@ const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('pending');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -55,6 +55,12 @@ const Orders: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
+      // Nouveaux statuts
+      case 'en_cours': return 'bg-yellow-100 text-yellow-800';
+      case 'confirme': return 'bg-blue-100 text-blue-800';
+      case 'livre': return 'bg-green-100 text-green-800';
+      case 'annule': return 'bg-red-100 text-red-800';
+      // Mapping temporaire des anciens statuts
       case 'pending': return 'bg-yellow-100 text-yellow-800';
       case 'confirmed': return 'bg-blue-100 text-blue-800';
       case 'processing': return 'bg-purple-100 text-purple-800';
@@ -67,12 +73,18 @@ const Orders: React.FC = () => {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'pending': return 'En attente';
-      case 'confirmed': return 'Confirmée';
-      case 'processing': return 'En traitement';
-      case 'shipped': return 'Expédiée';
-      case 'delivered': return 'Livrée';
-      case 'cancelled': return 'Annulée';
+      // Nouveaux statuts
+      case 'en_cours': return 'En cours';
+      case 'confirme': return 'Confirmé';
+      case 'livre': return 'Livré';
+      case 'annule': return 'Annulé';
+      // Mapping temporaire des anciens statuts
+      case 'pending': return 'En cours';
+      case 'confirmed': return 'Confirmé';
+      case 'processing': return 'En cours';
+      case 'shipped': return 'En cours';
+      case 'delivered': return 'Livré';
+      case 'cancelled': return 'Annulé';
       default: return status;
     }
   };
@@ -193,9 +205,9 @@ const Orders: React.FC = () => {
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600" style={{ color: '#4b5563' }}>En attente</p>
+              <p className="text-sm font-medium text-gray-600" style={{ color: '#4b5563' }}>En cours</p>
               <p className="text-2xl font-semibold text-gray-900" style={{ color: '#111827' }}>
-                {orders.filter(order => order.status === 'pending').length}
+                {orders.filter(order => order.status === 'en_cours').length}
               </p>
             </div>
           </div>
@@ -211,7 +223,7 @@ const Orders: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600" style={{ color: '#4b5563' }}>Livrées</p>
               <p className="text-2xl font-semibold text-gray-900" style={{ color: '#111827' }}>
-                {orders.filter(order => order.status === 'delivered').length}
+                {orders.filter(order => order.status === 'livre').length}
               </p>
             </div>
           </div>
@@ -243,12 +255,10 @@ const Orders: React.FC = () => {
               style={{ backgroundColor: '#ffffff', color: '#111827', borderColor: '#d1d5db' }}
             >
               <option value="all" style={{ color: '#111827' }}>Tous les statuts</option>
-              <option value="pending" style={{ color: '#111827' }}>En attente</option>
-              <option value="confirmed" style={{ color: '#111827' }}>Confirmée</option>
-              <option value="processing" style={{ color: '#111827' }}>En traitement</option>
-              <option value="shipped" style={{ color: '#111827' }}>Expédiée</option>
-              <option value="delivered" style={{ color: '#111827' }}>Livrée</option>
-              <option value="cancelled" style={{ color: '#111827' }}>Annulée</option>
+              <option value="pending" style={{ color: '#111827' }}>En cours</option>
+              <option value="confirmed" style={{ color: '#111827' }}>Confirmé</option>
+              <option value="delivered" style={{ color: '#111827' }}>Livré</option>
+              <option value="cancelled" style={{ color: '#111827' }}>Annulé</option>
             </select>
           </div>
         </div>
@@ -332,12 +342,10 @@ const Orders: React.FC = () => {
                       className="text-xs border border-gray-300 rounded px-2 py-1"
                       style={{ backgroundColor: '#ffffff', color: '#111827', borderColor: '#d1d5db' }}
                     >
-                      <option value="pending" style={{ color: '#111827' }}>En attente</option>
-                      <option value="confirmed" style={{ color: '#111827' }}>Confirmée</option>
-                      <option value="processing" style={{ color: '#111827' }}>En traitement</option>
-                      <option value="shipped" style={{ color: '#111827' }}>Expédiée</option>
-                      <option value="delivered" style={{ color: '#111827' }}>Livrée</option>
-                      <option value="cancelled" style={{ color: '#111827' }}>Annulée</option>
+                      <option value="en_cours" style={{ color: '#111827' }}>En cours</option>
+                      <option value="confirme" style={{ color: '#111827' }}>Confirmé</option>
+                      <option value="livre" style={{ color: '#111827' }}>Livré</option>
+                      <option value="annule" style={{ color: '#111827' }}>Annulé</option>
                     </select>
                   </div>
                 </div>

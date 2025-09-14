@@ -10,7 +10,7 @@ interface Order {
   shippingFee: number;
   discount: number;
   total: number;
-  status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: 'annule' | 'en_cours' | 'confirme' | 'livre';
   paymentMethod: string;
   isPaid: boolean;
   statusHistory: StatusHistoryItem[];
