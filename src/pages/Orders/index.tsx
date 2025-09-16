@@ -342,10 +342,10 @@ const Orders: React.FC = () => {
                       className="text-xs border border-gray-300 rounded px-2 py-1"
                       style={{ backgroundColor: '#ffffff', color: '#111827', borderColor: '#d1d5db' }}
                     >
-                      <option value="en_cours" style={{ color: '#111827' }}>En cours</option>
-                      <option value="confirme" style={{ color: '#111827' }}>Confirmé</option>
-                      <option value="livre" style={{ color: '#111827' }}>Livré</option>
-                      <option value="annule" style={{ color: '#111827' }}>Annulé</option>
+                      <option value="pending" style={{ color: '#111827' }}>En cours</option>
+                      <option value="confirmed" style={{ color: '#111827' }}>Confirmé</option>
+                      <option value="delivered" style={{ color: '#111827' }}>Livré</option>
+                      <option value="cancelled" style={{ color: '#111827' }}>Annulé</option>
                     </select>
                   </div>
                 </div>
