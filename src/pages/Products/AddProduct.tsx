@@ -316,7 +316,7 @@ const AddProduct = () => {
             setIsLoadingCategories(true);
             try {
                 const response = await getCategories();
-                console.log('Catégories chargées:', response.categories.map(c => ({ id: c.id, name: c.name })));
+                console.log('Catégories chargées:', response.categories.map(c => ({ _id: c._id, name: c.name })));
                 setCategories(response.categories);
             } catch (error) {
                 console.error('Erreur lors du chargement des catégories:', error);
