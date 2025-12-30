@@ -60,9 +60,12 @@ const CategoryCard = ({ category, isSelected, onSelect }: CategoryCardProps) => 
                     <input 
                         type="checkbox" 
                         checked={isSelected}
-                        onChange={onSelect}
+                        onChange={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onSelect();
+                        }}
                         className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                        onClick={(e) => e.stopPropagation()}
                     />
                 </div>
             </div>
@@ -180,19 +183,21 @@ const AddProduct = () => {
     };
 
     // Gestion des changements pour les catégories
-    const handleCategoryChange = (category: string) => {
-        const updatedCategories = [...productData.categories];
-        const categoryIndex = updatedCategories.indexOf(category);
-
-        if (categoryIndex === -1) {
-            updatedCategories.push(category);
-        } else {
-            updatedCategories.splice(categoryIndex, 1);
-        }
-
-        setProductData({
-            ...productData,
-            categories: updatedCategories,
+    const handleCategoryChange = (categoryId: string) => {
+        console.log('Clic sur catégorie:', categoryId);
+        console.log('Catégories actuelles:', productData.categories);
+        
+        setProductData(prev => {
+            const isAlreadySelected = prev.categories.includes(categoryId);
+            const updatedCategories = isAlreadySelected
+                ? prev.categories.filter(id => id !== categoryId)
+                : [...prev.categories, categoryId];
+            
+            console.log('Nouvelles catégories:', updatedCategories);
+            return {
+                ...prev,
+                categories: updatedCategories,
+            };
         });
     };
 
@@ -311,6 +316,7 @@ const AddProduct = () => {
             setIsLoadingCategories(true);
             try {
                 const response = await getCategories();
+                console.log('Catégories chargées:', response.categories.map(c => ({ id: c.id, name: c.name })));
                 setCategories(response.categories);
             } catch (error) {
                 console.error('Erreur lors du chargement des catégories:', error);
@@ -471,13 +477,13 @@ const AddProduct = () => {
                             ) : categories.length > 0 ? (
                                 <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 ${formErrors.categories ? 'border border-red-500 rounded-md p-2' : ''}`}>
                                     {categories.map((category) => {
-                                        const isSelected = productData.categories.includes(category.id);
+                                        const isSelected = productData.categories.includes(category._id);
                                         return (
                                             <CategoryCard 
-                                                key={category.id}
+                                                key={category._id}
                                                 category={category}
                                                 isSelected={isSelected}
-                                                onSelect={() => handleCategoryChange(category.id)}
+                                                onSelect={() => handleCategoryChange(category._id)}
                                             />
                                         );
                                     })}

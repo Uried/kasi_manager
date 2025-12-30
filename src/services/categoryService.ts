@@ -2,9 +2,10 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.kasi.market/api';
 
 export interface Category {
-  id: string;
+  _id: string;
+  id?: string; // Alias pour compatibilité
   name: string;
-  description: string;
+  description?: string;
   slug: string;
   image?: string;
   icon?: string;
