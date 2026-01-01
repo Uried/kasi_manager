@@ -33,7 +33,7 @@ const ProductsList = () => {
 
   // Suppression
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [productToDelete, setProductToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [productToDelete, setProductToDelete] = useState<{ id: string; _id?: string; name: string } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   // Récupération des produits depuis l'API
@@ -69,12 +69,13 @@ const ProductsList = () => {
   };
 
   const handleConfirmDelete = async () => {
-    if (!productToDelete?.id) return;
+    const productId = productToDelete?._id || productToDelete?.id;
+    if (!productId) return;
     try {
       setIsDeleting(true);
-      await deleteProduct(productToDelete.id);
+      await deleteProduct(productId);
       // Mettre à jour la liste localement
-      setProducts((prev) => prev.filter((p) => getProductId(p) !== productToDelete.id));
+      setProducts((prev) => prev.filter((p) => getProductId(p) !== productId));
       setTotalItems((prev) => Math.max(0, prev - 1));
       handleCloseDeleteModal();
     } catch (err) {
@@ -91,7 +92,7 @@ const ProductsList = () => {
     if (Array.isArray(product.categories)) {
       product.categories.forEach((category: string | Category) => {
         if (typeof category === 'object' && category.name) {
-          categoriesMap.set(category.id, category.name);
+          categoriesMap.set(category._id, category.name);
         }
       });
     }

@@ -3,7 +3,8 @@ import { uploadFile, getFiles, deleteFile, deleteMultipleFiles, formatImageUrl }
 import type { FileUploadResponse } from '../../services/fileService';
 
 interface MediaItem {
-  id: string;
+  _id?: string;
+  id?: string;
   name: string;
   type: string;
   language: string;
@@ -15,6 +16,9 @@ interface MediaItem {
   category?: string;
   createdAt?: string;
 }
+
+// Helper pour obtenir l'ID d'un MediaItem (compatible MongoDB _id et id)
+const getMediaItemId = (item: MediaItem): string => item._id || item.id || '';
 
 const MediaLibrary = () => {
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid');
@@ -169,7 +173,7 @@ const MediaLibrary = () => {
     if (selectAll) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(mediaItems.map(item => item.id));
+      setSelectedItems(mediaItems.map(item => getMediaItemId(item)));
     }
     setSelectAll(!selectAll);
   };
@@ -515,10 +519,11 @@ const MediaLibrary = () => {
       {viewMode === 'grid' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {filteredMediaItems.map((item) => {
-            const isSelected = selectedItems.includes(item.id);
+            const itemId = getMediaItemId(item);
+            const isSelected = selectedItems.includes(itemId);
             return (
               <div
-                key={item.id}
+                key={itemId}
                 className={`relative overflow-hidden ${isSelected ? 'border-2 border-blue-500' : ''}`}
                 style={{ borderRadius: '8px' }}
               >
@@ -541,7 +546,7 @@ const MediaLibrary = () => {
                 <div
                   className={`absolute top-0 left-0 w-8 h-8 flex items-center justify-center ${isSelected ? 'bg-blue-500' : 'bg-black bg-opacity-20'}`}
                   style={{ borderTopLeftRadius: '8px' }}
-                  onClick={() => handleSelectItem(item.id)}
+                  onClick={() => handleSelectItem(itemId)}
                 >
                   {/* Checkbox invisible pour l'accessibilité */}
                   <input
@@ -566,7 +571,7 @@ const MediaLibrary = () => {
                   </div>
                   <div 
                     className="hover:cursor-pointer"
-                    onClick={() => handleOpenDeleteModal(item.id)}
+                    onClick={() => handleOpenDeleteModal(itemId)}
                     title="Supprimer le fichier"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" /><path fill="#d92929" d="M20 5a1 1 0 1 1 0 2h-1l-.003.071l-.933 13.071A2 2 0 0 1 16.069 22H7.93a2 2 0 0 1-1.995-1.858l-.933-13.07L5 7H4a1 1 0 0 1 0-2zm-6-3a1 1 0 1 1 0 2h-4a1 1 0 0 1 0-2z" /></g></svg>
@@ -611,14 +616,16 @@ const MediaLibrary = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredMediaItems.map((item) => (
-                <tr key={item.id} className={selectedItems.includes(item.id) ? 'bg-blue-50' : ''}>
+              {filteredMediaItems.map((item) => {
+                const itemId = getMediaItemId(item);
+                return (
+                <tr key={itemId} className={selectedItems.includes(itemId) ? 'bg-blue-50' : ''}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <input
                       type="checkbox"
                       className="form-checkbox h-4 w-4 text-blue-600"
-                      checked={selectedItems.includes(item.id)}
-                      onChange={() => handleSelectItem(item.id)}
+                      checked={selectedItems.includes(itemId)}
+                      onChange={() => handleSelectItem(itemId)}
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -652,13 +659,14 @@ const MediaLibrary = () => {
                     </button>
                     <button 
                       className="text-red-600 hover:text-red-900"
-                      onClick={() => handleOpenDeleteModal(item.id)}
+                      onClick={() => handleOpenDeleteModal(itemId)}
                     >
                       Supprimer
                     </button>
                   </td>
                 </tr>
-              ))}
+              );
+              })}
             </tbody>
           </table>
         </div>

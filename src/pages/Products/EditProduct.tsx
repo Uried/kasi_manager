@@ -43,7 +43,7 @@ const EditProduct = () => {
         
         // Initialiser les catégories sélectionnées
         const categoryIds = productData.categories.map((cat: any) => 
-          typeof cat === 'string' ? cat : cat.id
+          typeof cat === 'string' ? cat : (cat._id || cat.id)
         );
         setSelectedCategories(categoryIds);
         
@@ -588,7 +588,7 @@ const EditProduct = () => {
             
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {availableCategories.map((category) => {
-                const categoryId = category.id;
+                const categoryId = category._id;
                 const isSelected = selectedCategories.includes(categoryId);
                 return (
                   <div key={categoryId} className="flex items-center">

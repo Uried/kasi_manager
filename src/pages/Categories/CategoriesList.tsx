@@ -50,9 +50,9 @@ const CategoriesList = () => {
   const handleConfirmDelete = async () => {
     if (!categoryToDelete) return;
     try {
-      await deleteCategory(categoryToDelete.id);
+      await deleteCategory(categoryToDelete._id);
       // Mise à jour locale
-      setCategories(prev => prev.filter(c => c.id !== categoryToDelete.id));
+      setCategories(prev => prev.filter(c => c._id !== categoryToDelete._id));
       setTotal(prev => Math.max(0, prev - 1));
       setSuccessMsg(`Catégorie "${categoryToDelete.name}" supprimée avec succès.`);
       setTimeout(() => setSuccessMsg(null), 3000);
@@ -129,7 +129,7 @@ const CategoriesList = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-100">
               {filtered.map((cat) => (
-                <tr key={cat.id} className="hover:bg-gray-50 transition-colors duration-150">
+                <tr key={cat._id} className="hover:bg-gray-50 transition-colors duration-150">
                   <td className="px-3 py-4">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 rounded-md overflow-hidden bg-gray-100 border">
@@ -161,7 +161,7 @@ const CategoriesList = () => {
                   <td className="px-3 py-4 whitespace-nowrap text-right text-sm text-gray-700">{new Date(cat.createdAt).toLocaleDateString('fr-FR')}</td>
                   <td className="px-3 py-4 whitespace-nowrap text-right space-x-2">
                     <Link
-                      to={`/categories/update/${cat.id}`}
+                      to={`/categories/update/${cat._id}`}
                       className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-md text-sm text-gray-700 hover:bg-gray-50"
                     >
                       Modifier

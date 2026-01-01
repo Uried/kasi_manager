@@ -30,8 +30,10 @@ export interface Fragrance {
 }
 
 export interface Category {
+  _id: string;
+  id?: string; // Alias pour compatibilité
   name: string;
-  description: string;
+  description?: string;
   slug: string;
   order: number;
   isActive: boolean;
@@ -40,7 +42,6 @@ export interface Category {
   viewCount: number;
   createdAt: string;
   updatedAt: string;
-  id: string;
 }
 
 export interface Product {
